@@ -16995,3 +16995,405 @@ section.driver-dashboard-section .driver-cancelled-message {
     }
 
 }
+
+/* =========================================================
+   FOODIEHUB HEADER + MOBILE PRODUCT GRID PATCH
+   Keeps the established black-and-green desktop appearance.
+   ========================================================= */
+
+.site-header .fh-navbar-brand {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 0.45rem !important;
+    flex: 0 0 auto !important;
+    color: #ffffff !important;
+    font-size: 25px !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px !important;
+    line-height: 1.1 !important;
+    text-decoration: none !important;
+    white-space: nowrap !important;
+}
+
+.site-header .fh-navbar-brand-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+.site-header .brand-foodie {
+    color: #ffffff !important;
+}
+
+.site-header .brand-hub,
+.site-header .fh-navbar-brand-highlight {
+    color: #22c55e !important;
+}
+
+.site-header .fh-main-navigation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: nowrap;
+    gap: 8px;
+    min-width: 0;
+    margin-left: auto;
+}
+
+.site-header .fh-main-navigation > .fh-nav-link,
+.site-header .fh-main-navigation > .login-link,
+.site-header .fh-main-navigation > .admin-nav-link {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 40px !important;
+    padding: 9px 11px !important;
+    border-radius: 9px !important;
+    background: transparent !important;
+    color: #fff0e6 !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease !important;
+}
+
+.site-header .fh-main-navigation > .fh-nav-link:hover,
+.site-header .fh-main-navigation > .fh-nav-link:focus-visible,
+.site-header .fh-main-navigation > .login-link:hover,
+.site-header .fh-main-navigation > .admin-nav-link:hover {
+    background: rgba(34, 197, 94, 0.08) !important;
+    color: #22c55e !important;
+    outline: none;
+}
+
+.site-header .fh-main-navigation > .register-button {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 40px !important;
+    padding: 0 14px !important;
+    border: 1px solid #22c55e !important;
+    border-radius: 10px !important;
+    background: #22c55e !important;
+    color: #061009 !important;
+    font-size: 13px !important;
+    font-weight: 800 !important;
+    white-space: nowrap;
+}
+
+.site-header .fh-main-navigation > .register-button:hover {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+.site-header .fh-main-navigation > .nav-cart-button {
+    position: relative !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    min-height: 40px !important;
+    padding: 0 13px !important;
+    border: 1px solid #294033 !important;
+    border-radius: 10px !important;
+    background: #111713 !important;
+    color: #ffffff !important;
+    font: inherit;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.site-header .fh-main-navigation > .nav-cart-button:hover {
+    border-color: #22c55e !important;
+    background: #162019 !important;
+    color: #22c55e !important;
+}
+
+.site-header .fh-main-navigation .cart-count {
+    display: none;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    background: #22c55e;
+    color: #061009;
+    font-size: 10px;
+    font-weight: 900;
+}
+
+.site-header .fh-main-navigation .user-name {
+    color: #ffffff !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    padding: 0 4px !important;
+}
+
+.site-header .fh-main-navigation .fh-nav-auth-form {
+    display: inline-flex;
+    align-items: center;
+    margin: 0;
+}
+
+.site-header .mobile-menu-toggle {
+    color: #ffffff;
+}
+
+.site-header .mobile-menu-toggle:hover,
+.site-header .mobile-menu-toggle:focus-visible {
+    border-color: #22c55e !important;
+    outline: none;
+}
+
+@media (max-width: 1100px) {
+    .site-header .fh-main-navigation {
+        gap: 4px;
+    }
+
+    .site-header .fh-main-navigation > .fh-nav-link,
+    .site-header .fh-main-navigation > .login-link,
+    .site-header .fh-main-navigation > .admin-nav-link {
+        padding-right: 8px !important;
+        padding-left: 8px !important;
+    }
+}
+
+/* Two food cards per row on mobile.
+   This intentionally overrides the older one-column rule at 650px. */
+@media (max-width: 650px) {
+    .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+
+    .product-card {
+        min-width: 0;
+    }
+
+    .product-image {
+        height: 140px !important;
+    }
+
+    .product-info {
+        padding: 12px !important;
+    }
+
+    .product-info h3 {
+        font-size: 15px !important;
+        line-height: 1.35 !important;
+        overflow-wrap: anywhere;
+    }
+
+    .product-info p {
+        font-size: 12px !important;
+        line-height: 1.45 !important;
+    }
+
+    .product-bottom {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 12px;
+    }
+
+    .product-bottom strong {
+        font-size: 15px !important;
+    }
+
+    .product-actions {
+        grid-template-columns: 1fr !important;
+        gap: 7px !important;
+    }
+
+    .cart-button,
+    .buy-button {
+        width: 100%;
+        padding: 9px 7px !important;
+        font-size: 12px !important;
+    }
+}
+
+@media (max-width: 360px) {
+    .product-grid {
+        gap: 8px !important;
+    }
+
+    .product-info {
+        padding: 9px !important;
+    }
+
+    .product-image {
+        height: 120px !important;
+    }
+}
+
+/* =========================================================
+   FOODIEHUB MOBILE NAV FIX
+   Compact two-column dropdown with reliable open/close states.
+   ========================================================= */
+.site-header .navbar {
+    position: relative;
+}
+
+.site-header .fh-main-navigation {
+    display: flex;
+}
+
+@media (max-width: 767px) {
+    .site-header .navbar {
+        min-height: 66px !important;
+        padding-top: 10px !important;
+        padding-bottom: 10px !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        gap: 10px !important;
+    }
+
+    .site-header .mobile-menu-toggle {
+        display: inline-flex !important;
+        margin-left: auto !important;
+        flex: 0 0 44px !important;
+    }
+
+    /* Specificity intentionally overrides older .nav-links display rules. */
+    .site-header .fh-main-navigation:not(.is-open) {
+        display: none !important;
+    }
+
+    .site-header .fh-main-navigation.is-open {
+        position: absolute !important;
+        top: calc(100% + 8px) !important;
+        right: 0 !important;
+        left: auto !important;
+        z-index: 1200 !important;
+        display: grid !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+        gap: 8px !important;
+        width: min(360px, calc(100vw - 24px)) !important;
+        max-height: min(65dvh, 520px) !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
+        padding: 12px !important;
+        border: 1px solid #294033 !important;
+        border-radius: 14px !important;
+        background: #090c0a !important;
+        box-shadow: 0 18px 45px rgba(0, 0, 0, .55) !important;
+    }
+
+    .site-header .fh-main-navigation > a,
+    .site-header .fh-main-navigation > button,
+    .site-header .fh-main-navigation > form {
+        box-sizing: border-box !important;
+        min-width: 0 !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .site-header .fh-main-navigation > .fh-nav-link,
+    .site-header .fh-main-navigation > .login-link,
+    .site-header .fh-main-navigation > .admin-nav-link,
+    .site-header .fh-main-navigation > .register-button,
+    .site-header .fh-main-navigation > .nav-cart-button {
+        display: flex !important;
+        min-height: 44px !important;
+        justify-content: flex-start !important;
+        padding: 10px !important;
+        white-space: normal !important;
+        text-align: left !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .site-header .fh-main-navigation > .user-name {
+        grid-column: 1 / -1 !important;
+        min-width: 0 !important;
+        overflow-wrap: anywhere !important;
+    }
+
+    .site-header .fh-main-navigation > form {
+        display: flex !important;
+    }
+
+    .site-header .fh-main-navigation > form .logout-button {
+        width: 100% !important;
+        min-height: 44px !important;
+        text-align: left !important;
+        justify-content: flex-start !important;
+    }
+}
+
+
+/* =========================================
+   FOODIEHUB HERO FOOD ILLUSTRATION
+========================================= */
+
+.hero-visual {
+    flex: 1 1 48%;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-food-image {
+    display: block;
+    width: 100%;
+    max-width: 560px;
+    max-height: 440px;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.3));
+    animation: foodieFloat 4s ease-in-out infinite;
+}
+
+@keyframes foodieFloat {
+    0%, 100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Tablet and mobile */
+@media (max-width: 900px) {
+    .hero-visual {
+        width: 100%;
+        flex: 0 0 auto;
+    }
+
+    .hero-food-image {
+        max-width: 420px;
+        max-height: 320px;
+    }
+}
+
+/* Small phones */
+@media (max-width: 600px) {
+    .hero-food-image {
+        max-width: 100%;
+        max-height: 280px;
+    }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .hero-food-image {
+        animation: none;
+    }
+}

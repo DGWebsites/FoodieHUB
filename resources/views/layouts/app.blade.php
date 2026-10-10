@@ -34,205 +34,85 @@
     ====================================================== --}}
 
     <header class="site-header">
-
         <div class="container navbar">
-
-            {{-- Logo --}}
-
-            <a
-                href="{{ route('home') }}"
-                class="brand"
-            >
-
-                <span class="brand-icon">
-                    🍴
-                </span>
-
-                <span style="color: #ffffff !important;">
-                    Foodie
-                </span>
-
-                <span style="color: #22c55e !important;">
-                    Hub
-                </span>
-
+            <a href="{{ route('home') }}" class="fh-navbar-brand" aria-label="FoodieHub home">
+                <span class="fh-navbar-brand-icon" aria-hidden="true">🍴</span>
+                <span><span class="brand-foodie">Foodie</span><span class="brand-hub">Hub</span></span>
             </a>
 
+            <button
+                type="button"
+                class="mobile-menu-toggle"
+                id="mobileMenuToggle"
+                aria-label="Open navigation menu"
+                aria-controls="mainNavigation"
+                aria-expanded="false"
+            >
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+                <span aria-hidden="true"></span>
+            </button>
 
-            {{-- Navigation --}}
-
-            <nav class="nav-links">
-
-                <a href="{{ route('home') }}">
-                    Home
-                </a>
-
-                <a href="{{ route('status') }}">
-                    Status
-                </a>
-
-                <a href="{{ route('tutorial') }}">
-                    Tutorial
-                </a>
-
-                <a href="{{ route('support') }}">
-                    Support
-                </a>
-
-                <a href="{{ route('about') }}">
-                    About Us
-                </a>
-
-
-                {{-- NOTIFICATIONS --}}
+            <nav id="mainNavigation" class="fh-main-navigation" aria-label="Main navigation">
+                <a href="{{ route('home') }}" class="fh-nav-link">Home</a>
+                <a href="{{ route('status') }}" class="fh-nav-link">Status</a>
+                <a href="{{ route('tutorial') }}" class="fh-nav-link">Tutorial</a>
+                <a href="{{ route('support') }}" class="fh-nav-link">Support</a>
+                <a href="{{ route('about') }}" class="fh-nav-link">About Us</a>
 
                 @auth
-
                     @include('partials.notifications')
-
                 @endauth
-
-
-                {{-- CART --}}
 
                 <button
                     type="button"
                     class="nav-cart-button"
                     onclick="openCart()"
+                    aria-label="Open shopping cart"
                 >
-
-                    🛒 Cart
-
-                    <span
-                        class="cart-count"
-                        style="display: none;"
-                    >
-                        0
-                    </span>
-
+                    <span aria-hidden="true">🛒</span>
+                    <span>Cart</span>
+                    <span class="cart-count" aria-live="polite">0</span>
                 </button>
 
-
-                {{-- AUTHENTICATED USER --}}
-
                 @auth
-
                     @if(auth()->user()->role === 'admin')
-
-                        <a
-                            href="{{ route('admin.dashboard') }}"
-                            class="admin-nav-link"
-                        >
+                        <a href="{{ route('admin.dashboard') }}" class="admin-nav-link">
                             🛡️ Admin Dashboard
                         </a>
 
-
-                        <form
-                            method="POST"
-                            action="{{ route('admin.logout') }}"
-                            style="display: inline;"
-                        >
-
+                        <form method="POST" action="{{ route('admin.logout') }}" class="fh-nav-auth-form">
                             @csrf
-
-                            <button
-                                type="submit"
-                                class="logout-button"
-                            >
-                                Logout
-                            </button>
-
+                            <button type="submit" class="logout-button">Logout</button>
                         </form>
 
-
                     @elseif(auth()->user()->role === 'driver')
-
-                        <a
-                            href="{{ route('driver.dashboard') }}"
-                            class="admin-nav-link"
-                        >
+                        <a href="{{ route('driver.dashboard') }}" class="admin-nav-link">
                             🚚 Driver Dashboard
                         </a>
 
+                        <span class="user-name">{{ auth()->user()->name }}</span>
 
-                        <span class="user-name">
-                            {{ auth()->user()->name }}
-                        </span>
-
-
-                        <form
-                            method="POST"
-                            action="{{ route('driver.logout') }}"
-                            style="display: inline;"
-                        >
-
+                        <form method="POST" action="{{ route('driver.logout') }}" class="fh-nav-auth-form">
                             @csrf
-
-                            <button
-                                type="submit"
-                                class="logout-button"
-                            >
-                                Logout
-                            </button>
-
+                            <button type="submit" class="logout-button">Logout</button>
                         </form>
-
 
                     @else
+                        <a href="{{ route('orders.index') }}" class="fh-nav-link">My Orders</a>
+                        <span class="user-name">{{ auth()->user()->name }}</span>
 
-                        <a href="{{ route('orders.index') }}">
-                            My Orders
-                        </a>
-
-
-                        <span class="user-name">
-                            {{ auth()->user()->name }}
-                        </span>
-
-
-                        <form
-                            method="POST"
-                            action="{{ route('logout') }}"
-                            style="display: inline;"
-                        >
-
+                        <form method="POST" action="{{ route('logout') }}" class="fh-nav-auth-form">
                             @csrf
-
-                            <button
-                                type="submit"
-                                class="logout-button"
-                            >
-                                Logout
-                            </button>
-
+                            <button type="submit" class="logout-button">Logout</button>
                         </form>
-
                     @endif
-
-
                 @else
-
-                    <a
-                        href="{{ route('login') }}"
-                        class="login-link"
-                    >
-                        Login
-                    </a>
-
-
-                    <a
-                        href="{{ route('register') }}"
-                        class="register-button"
-                    >
-                        Register
-                    </a>
-
+                    <a href="{{ route('login') }}" class="login-link">Login</a>
+                    <a href="{{ route('register') }}" class="register-button">Register</a>
                 @endauth
-
             </nav>
-
         </div>
-
     </header>
 
 
@@ -3959,6 +3839,257 @@
         }
 
     </style>
+
+
+
+    {{-- =====================================================
+         RESPONSIVE NAVIGATION
+         Compact two-column mobile menu; desktop navigation stays horizontal.
+    ====================================================== --}}
+    <style>
+        .site-header .navbar {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+
+        .fh-navbar-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: .45rem;
+            flex: 0 0 auto;
+            color: #fff;
+            font-size: 1.35rem;
+            font-weight: 800;
+            line-height: 1.1;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .fh-navbar-brand-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .site-header .mobile-menu-toggle {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 5px;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            padding: 0;
+            border: 1px solid #294033;
+            border-radius: 10px;
+            background: #111713;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .site-header .mobile-menu-toggle span {
+            display: block;
+            width: 21px;
+            height: 2px;
+            border-radius: 2px;
+            background: currentColor;
+            transition: transform .18s ease, opacity .18s ease;
+        }
+
+        .site-header .mobile-menu-toggle.is-open span:first-child {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .site-header .mobile-menu-toggle.is-open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .site-header .mobile-menu-toggle.is-open span:last-child {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        @media (max-width: 767px) {
+            .site-header .navbar {
+                min-height: 66px;
+                flex-direction: row;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                padding-top: 10px;
+                padding-bottom: 10px;
+            }
+
+            .site-header .fh-navbar-brand {
+                font-size: 23px;
+            }
+
+            .site-header .mobile-menu-toggle {
+                display: inline-flex;
+                margin-left: auto;
+            }
+
+            /* High-specificity display rules stop old .nav styles forcing this open. */
+            .site-header .fh-main-navigation:not(.is-open) {
+                display: none !important;
+            }
+
+            .site-header .fh-main-navigation.is-open {
+                position: absolute !important;
+                top: calc(100% + 8px) !important;
+                right: 0 !important;
+                left: auto !important;
+                z-index: 1200 !important;
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                align-items: stretch !important;
+                justify-content: stretch !important;
+                gap: 8px !important;
+                width: min(360px, calc(100vw - 24px)) !important;
+                max-height: min(65dvh, 520px) !important;
+                overflow-x: hidden !important;
+                overflow-y: auto !important;
+                box-sizing: border-box !important;
+                margin: 0 !important;
+                padding: 12px !important;
+                border: 1px solid #294033 !important;
+                border-radius: 14px !important;
+                background: #090c0a !important;
+                box-shadow: 0 18px 45px rgba(0, 0, 0, .55) !important;
+            }
+
+            .site-header .fh-main-navigation > a,
+            .site-header .fh-main-navigation > button,
+            .site-header .fh-main-navigation > form,
+            .site-header .fh-main-navigation > .user-name {
+                box-sizing: border-box !important;
+                min-width: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                margin: 0 !important;
+            }
+
+            .site-header .fh-main-navigation > .fh-nav-link,
+            .site-header .fh-main-navigation > .login-link,
+            .site-header .fh-main-navigation > .admin-nav-link,
+            .site-header .fh-main-navigation > .register-button,
+            .site-header .fh-main-navigation > .nav-cart-button {
+                display: flex !important;
+                min-height: 44px !important;
+                justify-content: flex-start !important;
+                white-space: normal !important;
+                text-align: left !important;
+                padding: 10px !important;
+                overflow-wrap: anywhere;
+            }
+
+            .site-header .fh-main-navigation > .user-name {
+                grid-column: 1 / -1;
+                padding: 8px 10px !important;
+                color: #b9c3bc !important;
+                font-size: 13px !important;
+                overflow-wrap: anywhere;
+            }
+
+            .site-header .fh-main-navigation > form {
+                display: flex !important;
+            }
+
+            .site-header .fh-main-navigation > form .logout-button {
+                width: 100% !important;
+                min-height: 44px !important;
+                text-align: left !important;
+                justify-content: flex-start !important;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .site-header .mobile-menu-toggle span {
+                transition: none;
+            }
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const menuButton = document.getElementById('mobileMenuToggle');
+            const navigation = document.getElementById('mainNavigation');
+            const mobileQuery = window.matchMedia('(max-width: 767px)');
+
+            if (!menuButton || !navigation) {
+                return;
+            }
+
+            function setMenuOpen(open) {
+                const shouldOpen = Boolean(open && mobileQuery.matches);
+
+                navigation.classList.toggle('is-open', shouldOpen);
+                menuButton.classList.toggle('is-open', shouldOpen);
+                menuButton.setAttribute('aria-expanded', String(shouldOpen));
+                menuButton.setAttribute(
+                    'aria-label',
+                    shouldOpen ? 'Close navigation menu' : 'Open navigation menu'
+                );
+                navigation.setAttribute(
+                    'aria-hidden',
+                    String(mobileQuery.matches && !shouldOpen)
+                );
+            }
+
+            menuButton.addEventListener('click', function (event) {
+                event.preventDefault();
+                setMenuOpen(!navigation.classList.contains('is-open'));
+            });
+
+            // Close after selecting any menu item, including the Cart button.
+            navigation.addEventListener('click', function (event) {
+                const control = event.target.closest('a, button');
+                if (control && navigation.contains(control)) {
+                    setMenuOpen(false);
+                }
+            });
+
+            // Close when a logout form is submitted.
+            navigation.addEventListener('submit', function () {
+                setMenuOpen(false);
+            });
+
+            // Close when the user taps/clicks outside the menu.
+            document.addEventListener('click', function (event) {
+                if (
+                    navigation.classList.contains('is-open') &&
+                    !navigation.contains(event.target) &&
+                    !menuButton.contains(event.target)
+                ) {
+                    setMenuOpen(false);
+                }
+            });
+
+            // Escape closes the menu; preserve expected keyboard behavior.
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && navigation.classList.contains('is-open')) {
+                    setMenuOpen(false);
+                    menuButton.focus();
+                }
+            });
+
+            // Always reset menu state when switching between mobile and desktop.
+            function handleBreakpointChange() {
+                setMenuOpen(false);
+            }
+
+            if (typeof mobileQuery.addEventListener === 'function') {
+                mobileQuery.addEventListener('change', handleBreakpointChange);
+            } else if (typeof mobileQuery.addListener === 'function') {
+                mobileQuery.addListener(handleBreakpointChange);
+            }
+
+            setMenuOpen(false);
+        });
+    </script>
 
 </body>
 

@@ -1,20 +1,21 @@
+
 @extends('layouts.app')
 
 @section('content')
 
 @php
-
     $storeSetting = \App\Models\StoreSetting::first();
 
     $storeIsOpen = $storeSetting
         ? $storeSetting->is_open
         : true;
-
 @endphp
 
+{{-- =========================================================
+     HERO SECTION
+========================================================= --}}
 
 <section class="hero">
-
     <div class="container hero-content">
 
         <div class="hero-text">
@@ -33,40 +34,30 @@
                 and order everything with just a few clicks.
             </p>
 
-            <a
-                href="#products"
-                class="primary-button"
-            >
+            <a href="#products" class="primary-button">
                 Explore Menu
             </a>
 
         </div>
 
+        {{-- CARTOON FOOD IMAGE --}}
 
-        <div class="hero-card">
-
-            <div class="hero-card-icon">
-                🍔
-            </div>
-
-            <h3>
-                Hungry?
-            </h3>
-
-            <p>
-                Your next meal is just a few clicks away.
-            </p>
-
+        <div class="hero-visual">
+           <img
+    src="{{ asset('images/background.png') }}"
+    alt="FoodieHub cartoon food illustration"
+    class="hero-food-image"
+>
         </div>
 
     </div>
-
 </section>
 
-
+{{-- =========================================================
+     FOOD SEARCH AND CATEGORIES
+========================================================= --}}
 
 <section class="food-dashboard">
-
     <div class="container">
 
         {{-- SEARCH --}}
@@ -76,25 +67,20 @@
             action="{{ route('home') }}"
             class="food-search"
         >
-
-            <span class="search-icon">
-                🔎
-            </span>
+            <span class="search-icon">🔎</span>
 
             <input
                 type="text"
                 name="search"
                 value="{{ request('search') }}"
                 placeholder="Search food..."
+                aria-label="Search food"
             >
 
             <button type="submit">
                 Search
             </button>
-
         </form>
-
-
 
         {{-- CATEGORIES --}}
 
@@ -104,25 +90,20 @@
                 Categories:
             </span>
 
-
             <div class="category-list">
 
                 <a
                     href="{{ route('home') }}"
-                    class="category-button"
+                    class="category-button {{ !request('category') ? 'active' : '' }}"
                 >
                     🍽️ All
                 </a>
 
-
                 @foreach ($categories as $category)
 
                     <a
-                        href="{{ route(
-                            'home',
-                            ['category' => $category->id]
-                        ) }}"
-                        class="category-button"
+                        href="{{ route('home', ['category' => $category->id]) }}"
+                        class="category-button {{ (string) request('category') === (string) $category->id ? 'active' : '' }}"
                     >
                         {{ $category->name }}
                     </a>
@@ -130,20 +111,16 @@
                 @endforeach
 
             </div>
-
         </div>
 
     </div>
-
 </section>
 
+{{-- =========================================================
+     PRODUCTS SECTION
+========================================================= --}}
 
-
-<section
-    class="products-section"
-    id="products"
->
-
+<section class="products-section" id="products">
     <div class="container">
 
         {{-- SECTION HEADER --}}
@@ -151,7 +128,6 @@
         <div class="section-heading">
 
             <div>
-
                 <span class="section-label">
                     OUR MENU
                 </span>
@@ -159,7 +135,6 @@
                 <h2>
                     Popular Food
                 </h2>
-
             </div>
 
             <p>
@@ -167,8 +142,6 @@
             </p>
 
         </div>
-
-
 
         {{-- EMPTY STATE --}}
 
@@ -190,9 +163,7 @@
 
             </div>
 
-
         @else
-
 
             {{-- PRODUCT GRID --}}
 
@@ -202,22 +173,16 @@
 
                     <article class="product-card">
 
-
-                        {{-- =================================================
-                             PRODUCT IMAGE
-                             NOT CLICKABLE
-                        ================================================== --}}
+                        {{-- PRODUCT IMAGE --}}
 
                         <div class="product-image">
 
                             @if ($product->image)
 
                                 <img
-                                    src="{{ asset(
-                                        'storage/' .
-                                        $product->image
-                                    ) }}"
+                                    src="{{ asset('storage/' . $product->image) }}"
                                     alt="{{ $product->name }}"
+                                    loading="lazy"
                                 >
 
                             @else
@@ -230,14 +195,9 @@
 
                         </div>
 
-
-
-                        {{-- =================================================
-                             PRODUCT INFORMATION
-                        ================================================== --}}
+                        {{-- PRODUCT INFORMATION --}}
 
                         <div class="product-info">
-
 
                             {{-- CATEGORY --}}
 
@@ -249,15 +209,11 @@
 
                             @endif
 
-
-
                             {{-- NAME --}}
 
                             <h3>
                                 {{ $product->name }}
                             </h3>
-
-
 
                             {{-- DESCRIPTION --}}
 
@@ -269,31 +225,19 @@
 
                             @endif
 
-
-
                             {{-- PRICE --}}
 
                             <div class="product-bottom">
 
                                 <strong>
-                                    ₱{{ number_format(
-                                        $product->price,
-                                        2
-                                    ) }}
+                                    ₱{{ number_format($product->price, 2) }}
                                 </strong>
 
                             </div>
 
-
-
-                            {{-- =================================================
-                                 PRODUCT ACTIONS
-                            ================================================== --}}
+                            {{-- PRODUCT ACTIONS --}}
 
                             <div class="product-actions">
-
-
-                                {{-- ADD TO CART --}}
 
                                 <button
                                     type="button"
@@ -303,10 +247,6 @@
                                 >
                                     🛒 Cart
                                 </button>
-
-
-
-                                {{-- BUY NOW --}}
 
                                 <button
                                     type="button"
@@ -330,14 +270,11 @@
         @endif
 
     </div>
-
 </section>
 
-
-
-{{-- =============================================================
+{{-- =========================================================
      STORE CLOSED MODAL
-============================================================= --}}
+========================================================= --}}
 
 <div
     id="fhStoreClosedModal"
@@ -350,9 +287,7 @@
     <div
         class="fh-store-closed-overlay"
         data-store-closed-cancel
-    >
-    </div>
-
+    ></div>
 
     {{-- MODAL BOX --}}
 
@@ -363,36 +298,22 @@
         aria-labelledby="fhStoreClosedTitle"
     >
 
-        {{-- ICON --}}
-
         <div class="fh-store-closed-icon">
             🔴
         </div>
-
-
-        {{-- LABEL --}}
 
         <span class="fh-store-closed-label">
             STORE STATUS
         </span>
 
-
-        {{-- TITLE --}}
-
         <h2 id="fhStoreClosedTitle">
             FoodieHub is Closed
         </h2>
-
-
-        {{-- MESSAGE --}}
 
         <p>
             We're currently not accepting new orders.
             Please check back later when the store is open.
         </p>
-
-
-        {{-- BUTTON --}}
 
         <button
             type="button"
@@ -406,23 +327,21 @@
 
 </div>
 
-
-
-{{-- =============================================================
+{{-- =========================================================
      STORE STATUS DATA
-============================================================= --}}
+========================================================= --}}
 
 <div
     id="fhStoreStatusData"
     data-store-open="{{ $storeIsOpen ? '1' : '0' }}"
     hidden
->
-</div>
+></div>
 
-
+{{-- =========================================================
+     PRODUCT AND STORE MODAL JAVASCRIPT
+========================================================= --}}
 
 <script>
-
 document.addEventListener('DOMContentLoaded', function () {
 
     /*
@@ -431,16 +350,12 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const storeStatusData =
-        document.getElementById(
-            'fhStoreStatusData'
-        );
+    const storeStatusData = document.getElementById(
+        'fhStoreStatusData'
+    );
 
-    const storeIsOpen =
-        storeStatusData
+    const storeIsOpen = storeStatusData
         && storeStatusData.dataset.storeOpen === '1';
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -448,17 +363,13 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const cartButtons =
-        document.querySelectorAll(
-            '[data-action="cart"]'
-        );
+    const cartButtons = document.querySelectorAll(
+        '[data-action="cart"]'
+    );
 
-    const buyButtons =
-        document.querySelectorAll(
-            '[data-action="buy"]'
-        );
-
-
+    const buyButtons = document.querySelectorAll(
+        '[data-action="buy"]'
+    );
 
     /*
     |--------------------------------------------------------------------------
@@ -466,71 +377,43 @@ document.addEventListener('DOMContentLoaded', function () {
     |--------------------------------------------------------------------------
     */
 
-    const storeClosedModal =
-        document.getElementById(
-            'fhStoreClosedModal'
-        );
+    const storeClosedModal = document.getElementById(
+        'fhStoreClosedModal'
+    );
 
-    const closeButtons =
-        document.querySelectorAll(
-            '[data-store-closed-cancel]'
-        );
+    const closeButtons = document.querySelectorAll(
+        '[data-store-closed-cancel]'
+    );
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | OPEN STORE CLOSED MODAL
-    |--------------------------------------------------------------------------
-    */
-
-    function openStoreClosedModal()
-    {
+    function openStoreClosedModal() {
         if (!storeClosedModal) {
             return;
         }
 
-        storeClosedModal.classList.add(
-            'open'
-        );
+        storeClosedModal.classList.add('open');
 
         storeClosedModal.setAttribute(
             'aria-hidden',
             'false'
         );
 
-        document.body.style.overflow =
-            'hidden';
+        document.body.style.overflow = 'hidden';
     }
 
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | CLOSE STORE CLOSED MODAL
-    |--------------------------------------------------------------------------
-    */
-
-    function closeStoreClosedModal()
-    {
+    function closeStoreClosedModal() {
         if (!storeClosedModal) {
             return;
         }
 
-        storeClosedModal.classList.remove(
-            'open'
-        );
+        storeClosedModal.classList.remove('open');
 
         storeClosedModal.setAttribute(
             'aria-hidden',
             'true'
         );
 
-        document.body.style.overflow =
-            '';
+        document.body.style.overflow = '';
     }
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -540,31 +423,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
     cartButtons.forEach(function (button) {
 
-        button.addEventListener(
-            'click',
-            function () {
+        button.addEventListener('click', function () {
 
-                const productId =
-                    this.dataset.productId;
+            const productId = this.dataset.productId;
 
-                if (
-                    typeof window.addToCart ===
-                        'function'
-                    && productId
-                ) {
-
-                    window.addToCart(
-                        productId
-                    );
-
-                }
-
+            if (
+                typeof window.addToCart === 'function'
+                && productId
+            ) {
+                window.addToCart(productId);
             }
-        );
+
+        });
 
     });
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -574,52 +446,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
     buyButtons.forEach(function (button) {
 
-        button.addEventListener(
-            'click',
-            function () {
+        button.addEventListener('click', function () {
 
-                const productId =
-                    this.dataset.productId;
+            const productId = this.dataset.productId;
 
-
-                /*
-                |--------------------------------------------------------------------------
-                | STORE CLOSED
-                |--------------------------------------------------------------------------
-                */
-
-                if (!storeIsOpen) {
-
-                    openStoreClosedModal();
-
-                    return;
-                }
-
-
-                /*
-                |--------------------------------------------------------------------------
-                | STORE LIVE
-                |--------------------------------------------------------------------------
-                */
-
-                if (
-                    typeof window.buyNow ===
-                        'function'
-                    && productId
-                ) {
-
-                    window.buyNow(
-                        productId
-                    );
-
-                }
-
+            if (!storeIsOpen) {
+                openStoreClosedModal();
+                return;
             }
-        );
+
+            if (
+                typeof window.buyNow === 'function'
+                && productId
+            ) {
+                window.buyNow(productId);
+            }
+
+        });
 
     });
-
-
 
     /*
     |--------------------------------------------------------------------------
@@ -636,291 +481,126 @@ document.addEventListener('DOMContentLoaded', function () {
 
     });
 
-
-
     /*
     |--------------------------------------------------------------------------
-    | ESC KEY
+    | ESCAPE KEY
     |--------------------------------------------------------------------------
     */
 
-    document.addEventListener(
-        'keydown',
-        function (event) {
+    document.addEventListener('keydown', function (event) {
 
-            if (
-                event.key === 'Escape'
-                && storeClosedModal
-                && storeClosedModal.classList.contains(
-                    'open'
-                )
-            ) {
-
-                closeStoreClosedModal();
-
-            }
-
+        if (
+            event.key === 'Escape'
+            && storeClosedModal
+            && storeClosedModal.classList.contains('open')
+        ) {
+            closeStoreClosedModal();
         }
-    );
+
+    });
 
 });
-
 </script>
 
-
+{{-- =========================================================
+     STORE CLOSED MODAL STYLES
+========================================================= --}}
 
 <style>
-
-/* =========================================================
-   STORE CLOSED MODAL
-========================================================= */
-
 .fh-store-closed-modal {
-
     position: fixed;
-
     inset: 0;
-
     z-index: 2147483000;
-
     display: none;
-
     align-items: center;
-
     justify-content: center;
-
     padding: 20px;
-
     box-sizing: border-box;
-
 }
 
 .fh-store-closed-modal.open {
-
     display: flex;
-
 }
-
-
-/* =========================================================
-   OVERLAY
-========================================================= */
 
 .fh-store-closed-overlay {
-
     position: absolute;
-
     inset: 0;
-
-    background: rgba(
-        0,
-        0,
-        0,
-        0.78
-    );
-
+    background: rgba(0, 0, 0, 0.78);
 }
-
-
-/* =========================================================
-   MODAL BOX
-========================================================= */
 
 .fh-store-closed-box {
-
     position: relative;
-
     z-index: 1;
-
-    width: min(
-        430px,
-        100%
-    );
-
+    width: min(430px, 100%);
     padding: 30px;
-
     box-sizing: border-box;
-
     background: #111512;
-
     border: 1px solid #4b2929;
-
     border-radius: 20px;
-
     text-align: center;
-
-    box-shadow:
-        0 25px 70px
-        rgba(
-            0,
-            0,
-            0,
-            0.55
-        );
-
+    box-shadow: 0 25px 70px rgba(0, 0, 0, 0.55);
 }
-
-
-/* =========================================================
-   ICON
-========================================================= */
 
 .fh-store-closed-icon {
-
     width: 62px;
-
     height: 62px;
-
     margin: 0 auto 17px;
-
     display: flex;
-
     align-items: center;
-
     justify-content: center;
-
     border-radius: 17px;
-
-    background:
-        rgba(
-            239,
-            68,
-            68,
-            0.10
-        );
-
-    border:
-        1px solid
-        rgba(
-            239,
-            68,
-            68,
-            0.22
-        );
-
+    background: rgba(239, 68, 68, 0.10);
+    border: 1px solid rgba(239, 68, 68, 0.22);
     font-size: 28px;
-
 }
-
-
-/* =========================================================
-   LABEL
-========================================================= */
 
 .fh-store-closed-label {
-
     display: block;
-
     margin-bottom: 7px;
-
     color: #f87171;
-
     font-size: 11px;
-
     font-weight: 800;
-
     letter-spacing: 0.10em;
-
 }
-
-
-/* =========================================================
-   TITLE
-========================================================= */
 
 .fh-store-closed-box h2 {
-
-    margin:
-        0
-        0
-        10px;
-
+    margin: 0 0 10px;
     color: #ffffff;
-
     font-size: 23px;
-
     font-weight: 800;
-
 }
-
-
-/* =========================================================
-   MESSAGE
-========================================================= */
 
 .fh-store-closed-box p {
-
     max-width: 340px;
-
-    margin:
-        0
-        auto;
-
+    margin: 0 auto;
     color: #9ca6a0;
-
     font-size: 13px;
-
     line-height: 1.7;
-
 }
-
-
-/* =========================================================
-   BUTTON
-========================================================= */
 
 .fh-store-closed-button {
-
     width: 100%;
-
     min-height: 46px;
-
     margin-top: 24px;
-
-    border:
-        1px solid
-        #344038;
-
+    border: 1px solid #344038;
     border-radius: 11px;
-
     background: #0d100e;
-
     color: #ffffff;
-
     font-size: 13px;
-
     font-weight: 800;
-
     cursor: pointer;
-
 }
-
 
 .fh-store-closed-button:hover {
-
     background: #171c18;
-
     border-color: #4a574f;
-
 }
 
-
-/* =========================================================
-   IMAGE IS NOT CLICKABLE
-========================================================= */
-
-.product-image {
-
-    cursor: default;
-
-}
-
+/* Product images remain non-clickable. */
+.product-image,
 .product-image img {
-
     cursor: default;
-
 }
-
 </style>
 
 @endsection
