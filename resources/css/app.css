@@ -17337,9 +17337,147 @@ section.driver-dashboard-section .driver-cancelled-message {
 }
 
 
-/* =========================================
+/* =========================================================
+   ACTIVE NAVIGATION STATE
+   Keep the current page link green after navigation.
+========================================================= */
+.site-header .fh-main-navigation > .fh-nav-link.is-active,
+.site-header .fh-main-navigation > .login-link.is-active,
+.site-header .fh-main-navigation > .admin-nav-link.is-active {
+    color: #22c55e !important;
+    background: rgba(34, 197, 94, 0.12) !important;
+    box-shadow: inset 0 -2px 0 #22c55e;
+}
+
+.site-header .fh-main-navigation > .fh-nav-link.is-active:hover,
+.site-header .fh-main-navigation > .login-link.is-active:hover,
+.site-header .fh-main-navigation > .admin-nav-link.is-active:hover {
+    color: #22c55e !important;
+    background: rgba(34, 197, 94, 0.16) !important;
+}
+
+.site-header .fh-main-navigation > .register-button.is-active {
+    background: #15803d !important;
+    border-color: #22c55e !important;
+    color: #ffffff !important;
+}
+
+/* A small confirmation replaces automatically opening the cart drawer. */
+.fh-cart-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    z-index: 2147482000;
+    max-width: min(440px, calc(100vw - 32px));
+    padding: 12px 18px;
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    border-radius: 12px;
+    background: #101812;
+    color: #f4fff7;
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transform: translate(-50%, 12px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.fh-cart-toast.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 0);
+}
+
+@media (max-width: 600px) {
+    .fh-cart-toast {
+        bottom: 16px;
+        font-size: 13px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fh-cart-toast {
+        transition: none;
+    }
+}
+
+
+/* =========================================================
+   MOBILE CART BESIDE HAMBURGER
+   Desktop navigation and existing cart logic remain unchanged.
+========================================================= */
+.mobile-cart-toggle {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .site-header .navbar .mobile-cart-toggle {
+        position: relative;
+        display: inline-flex !important;
+        flex: 0 0 44px !important;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        height: 44px;
+        margin-left: auto;
+        padding: 0;
+        border: 1px solid #294033;
+        border-radius: 10px;
+        background: #111713;
+        color: #ffffff;
+        font-size: 20px;
+        line-height: 1;
+        cursor: pointer;
+    }
+
+    /* The cart and hamburger stay side by side in the header. */
+    .site-header .navbar .mobile-menu-toggle {
+        margin-left: 0 !important;
+        flex: 0 0 44px !important;
+    }
+
+    .site-header .navbar .mobile-cart-toggle:hover,
+    .site-header .navbar .mobile-cart-toggle:focus-visible {
+        border-color: #22c55e;
+        outline: none;
+    }
+
+    /* Hide the duplicate text Cart button inside the mobile dropdown. */
+    .site-header #mainNavigation > .nav-cart-button {
+        display: none !important;
+    }
+
+    .site-header .mobile-cart-toggle .cart-count {
+        position: absolute;
+        top: -5px;
+        right: -5px;
+        min-width: 19px;
+        height: 19px;
+        padding: 0 4px;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        border: 2px solid #090c0a;
+        border-radius: 999px;
+        background: #18bd89;
+        color: #06130e;
+        font-size: 10px;
+        font-weight: 900;
+        line-height: 1;
+        text-align: center;
+    }
+}
+
+/* =========================================================
    FOODIEHUB HERO FOOD ILLUSTRATION
-========================================= */
+   Desktop: Right side
+   Mobile: Larger and centered
+========================================================= */
 
 .hero-visual {
     flex: 1 1 48%;
@@ -17352,16 +17490,18 @@ section.driver-dashboard-section .driver-cancelled-message {
 .hero-food-image {
     display: block;
     width: 100%;
-    max-width: 560px;
-    max-height: 440px;
+    max-width: 520px;
+    max-height: 420px;
     height: auto;
     object-fit: contain;
     filter: drop-shadow(0 18px 30px rgba(0, 0, 0, 0.3));
     animation: foodieFloat 4s ease-in-out infinite;
 }
 
+/* Gentle floating animation */
 @keyframes foodieFloat {
-    0%, 100% {
+    0%,
+    100% {
         transform: translateY(0);
     }
 
@@ -17370,24 +17510,42 @@ section.driver-dashboard-section .driver-cancelled-message {
     }
 }
 
-/* Tablet and mobile */
-@media (max-width: 900px) {
+/* Tablet */
+@media (min-width: 601px) and (max-width: 900px) {
     .hero-visual {
+        align-self: stretch;
         width: 100%;
         flex: 0 0 auto;
     }
 
     .hero-food-image {
-        max-width: 420px;
-        max-height: 320px;
+        width: 100%;
+        max-width: 430px;
+        max-height: 350px;
     }
 }
 
-/* Small phones */
+/* Mobile: Bigger and centered */
 @media (max-width: 600px) {
+    .hero-visual {
+        align-self: stretch;
+        width: 100%;
+        flex: 0 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 8px auto 0;
+    }
+
     .hero-food-image {
-        max-width: 100%;
-        max-height: 280px;
+        display: block;
+        width: 96%;
+        max-width: 370px;
+        max-height: 310px;
+        height: auto;
+        margin-left: auto;
+        margin-right: auto;
+        object-fit: contain;
     }
 }
 

@@ -40,6 +40,17 @@
                 <span><span class="brand-foodie">Foodie</span><span class="brand-hub">Hub</span></span>
             </a>
 
+            {{-- MOBILE CART BUTTON: visible only on small screens --}}
+            <button
+                type="button"
+                class="mobile-cart-toggle"
+                onclick="openCart()"
+                aria-label="Open shopping cart"
+            >
+                <span aria-hidden="true">🛒</span>
+                <span class="cart-count" style="display: none;" aria-live="polite">0</span>
+            </button>
+
             <button
                 type="button"
                 class="mobile-menu-toggle"
@@ -54,11 +65,11 @@
             </button>
 
             <nav id="mainNavigation" class="fh-main-navigation" aria-label="Main navigation">
-                <a href="{{ route('home') }}" class="fh-nav-link">Home</a>
-                <a href="{{ route('status') }}" class="fh-nav-link">Status</a>
-                <a href="{{ route('tutorial') }}" class="fh-nav-link">Tutorial</a>
-                <a href="{{ route('support') }}" class="fh-nav-link">Support</a>
-                <a href="{{ route('about') }}" class="fh-nav-link">About Us</a>
+                <a href="{{ route('home') }}" class="fh-nav-link{{ request()->routeIs('home') ? ' is-active' : '' }}" @if(request()->routeIs('home')) aria-current="page" @endif>Home</a>
+                <a href="{{ route('status') }}" class="fh-nav-link{{ request()->routeIs('status') ? ' is-active' : '' }}" @if(request()->routeIs('status')) aria-current="page" @endif>Status</a>
+                <a href="{{ route('tutorial') }}" class="fh-nav-link{{ request()->routeIs('tutorial') ? ' is-active' : '' }}" @if(request()->routeIs('tutorial')) aria-current="page" @endif>Tutorial</a>
+                <a href="{{ route('support') }}" class="fh-nav-link{{ request()->routeIs('support') ? ' is-active' : '' }}" @if(request()->routeIs('support')) aria-current="page" @endif>Support</a>
+                <a href="{{ route('about') }}" class="fh-nav-link{{ request()->routeIs('about') ? ' is-active' : '' }}" @if(request()->routeIs('about')) aria-current="page" @endif>About Us</a>
 
                 @auth
                     @include('partials.notifications')
@@ -77,7 +88,7 @@
 
                 @auth
                     @if(auth()->user()->role === 'admin')
-                        <a href="{{ route('admin.dashboard') }}" class="admin-nav-link">
+                        <a href="{{ route('admin.dashboard') }}" class="admin-nav-link{{ request()->routeIs('admin.dashboard') ? ' is-active' : '' }}" @if(request()->routeIs('admin.dashboard')) aria-current="page" @endif>
                             🛡️ Admin Dashboard
                         </a>
 
@@ -87,7 +98,7 @@
                         </form>
 
                     @elseif(auth()->user()->role === 'driver')
-                        <a href="{{ route('driver.dashboard') }}" class="admin-nav-link">
+                        <a href="{{ route('driver.dashboard') }}" class="admin-nav-link{{ request()->routeIs('driver.dashboard') ? ' is-active' : '' }}" @if(request()->routeIs('driver.dashboard')) aria-current="page" @endif>
                             🚚 Driver Dashboard
                         </a>
 
@@ -99,7 +110,7 @@
                         </form>
 
                     @else
-                        <a href="{{ route('orders.index') }}" class="fh-nav-link">My Orders</a>
+                        <a href="{{ route('orders.index') }}" class="fh-nav-link{{ request()->routeIs('orders.*') ? ' is-active' : '' }}" @if(request()->routeIs('orders.*')) aria-current="page" @endif>My Orders</a>
                         <span class="user-name">{{ auth()->user()->name }}</span>
 
                         <form method="POST" action="{{ route('logout') }}" class="fh-nav-auth-form">
@@ -108,8 +119,8 @@
                         </form>
                     @endif
                 @else
-                    <a href="{{ route('login') }}" class="login-link">Login</a>
-                    <a href="{{ route('register') }}" class="register-button">Register</a>
+                    <a href="{{ route('login') }}" class="login-link{{ request()->routeIs('login') ? ' is-active' : '' }}" @if(request()->routeIs('login')) aria-current="page" @endif>Login</a>
+                    <a href="{{ route('register') }}" class="register-button{{ request()->routeIs('register') ? ' is-active' : '' }}" @if(request()->routeIs('register')) aria-current="page" @endif>Register</a>
                 @endauth
             </nav>
         </div>
@@ -360,6 +371,8 @@
         onclick="closeCart(event)"
     >
     </div>
+
+    <div id="fhCartToast" class="fh-cart-toast" role="status" aria-live="polite"></div>
 
 
 
@@ -922,6 +935,33 @@
 
 
         /* =====================================================
+           CART SUCCESS MESSAGE (WITHOUT OPENING THE CART)
+        ====================================================== */
+
+        let fhCartToastTimer = null;
+
+        function showCartToast(message)
+        {
+            const toast = document.getElementById('fhCartToast');
+
+            if (!toast) {
+                return;
+            }
+
+            toast.textContent = message || 'Added to cart. Open Cart whenever you are ready.';
+            toast.classList.add('is-visible');
+
+            if (fhCartToastTimer !== null) {
+                window.clearTimeout(fhCartToastTimer);
+            }
+
+            fhCartToastTimer = window.setTimeout(function () {
+                toast.classList.remove('is-visible');
+            }, 2600);
+        }
+
+
+        /* =====================================================
            ADD PRODUCT
         ====================================================== */
 
@@ -982,8 +1022,8 @@
                     data.count
                 );
 
-
-                openCart();
+                // Add the item quietly; the customer can open Cart when ready.
+                showCartToast(data.message || 'Added to cart. Open Cart whenever you are ready.');
 
             }
 
